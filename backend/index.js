@@ -1,5 +1,5 @@
-import { connectToMongo } from "./db.js"
-import express from "express"
+const connectToMongo = require("./db")
+const express = require("express")
 
 connectToMongo()
 
@@ -7,9 +7,11 @@ const app = express()
 const port = 3000
 
 app.get('/', (req, res) => {
-    res.send('Hello hii!')
+    res.send('Hello world2')
 })
 
+app.use("/api/auth", require("./routes/auth"));
+
 app.listen(port, () => {
-    console.log(`Example app listening on port 127.0.0.1:${port}`)
+    console.log(`Example app listening on port http://localhost:${port}`)
 })
