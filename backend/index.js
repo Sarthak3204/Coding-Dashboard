@@ -10,8 +10,8 @@ app.get('/', (req, res) => {
     res.send('Hello world2')
 })
 
+app.use(express.json())//middleware
+
 app.use("/api/auth", require("./routes/auth"));
 
-app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`)
-})
+app.listen(port, () => console.log(`Example app listening on port http://localhost:${port}`))
