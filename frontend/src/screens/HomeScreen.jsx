@@ -3,46 +3,38 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from "../redux/slices/loginSlice";
+import { removeCredentials } from '../redux/slices/authSlice';
+import { useLogoutMutation } from '../redux/slices/userApiSlice';
 
 export default function HomeScreen() {
-  const { isLoggedIn } = useSelector(state => state.logger);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const logout = async () => {
+  const [logout] = useLogoutMutation();
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/users/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        }
-      })
+      await logout().unwrap();
 
-      const data = await response.json();
-
-      if (response.ok) {
-        dispatch(logoutUser());
-        toast.success("Logged out Successfully");
-        navigate("/");
-      }
-      else {
-        toast.error(data.message);
-      }
+      dispatch(removeCredentials());
+      navigate('/');
+      toast.success("Logout Successful");
     }
     catch (err) {
-      console.error(err);
+      toast.error(err?.data?.message || err.error);
     }
-  }
+  };
 
   return (
     <>
       <div>HomeScreen</div>
       {
-        isLoggedIn ?
+        userInfo ?
           <>
             <div><Link to='/profile'><button>Profile</button></Link></div>
-            <button onClick={logout}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </> :
           <>
             <div><Link to='/login'><button>Sign In</button></Link></div>

@@ -1,43 +1,46 @@
-import React, { useState } from 'react'
+// @ts-nocheck
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCredentials } from '../redux/slices/authSlice';
+import { useRegisterMutation } from '../redux/slices/userApiSlice';
 
 export default function LoginScreen() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [name, setName] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPass, setConfPass] = useState("")
-  const navigate = useNavigate();
+
+  const [register] = useRegisterMutation();
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/');
+    }
+  }, [navigate, userInfo]);
 
   const handleSumbit = async (e) => {
     e.preventDefault();
 
     if (password !== confPass) {
-      toast.error("Password and confirm password do not match");
+      toast.error("Passwords do not matchh");
     }
+    else {
+      try {
+        const res = await register({ name, email, password }).unwrap();
 
-    try {
-      const response = await fetch("http://localhost:5000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name, email, password
-        })
-      })
-
-      const data = await response.json();
-      if (response.ok) {
+        dispatch(setCredentials(res));
+        navigate('/');
         toast.success("Registration Successful");
-        navigate("/login");
       }
-      else {
-        toast.error(data.message);
+      catch (err) {
+        toast.error(err?.data?.message || err.error);
       }
-    }
-    catch (err) {
-      console.error(err);
     }
   }
 
