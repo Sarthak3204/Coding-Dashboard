@@ -1,9 +1,13 @@
+// @ts-nocheck
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { setCodeforces } from '../redux/slices/codeforcesSlice';
 
 export default function CodeforcesScreen() {
+  const dispatch = useDispatch();
 
   const [cfhandle, setCfHandle] = useState("");
   const [myData, setMyData] = useState([{}]);
@@ -13,6 +17,20 @@ export default function CodeforcesScreen() {
 
   const [myUnfilteredSumbmission, setMyUnfilteredSumbmission] = useState([]);
   const [myFilteredSumbmission, setMyFilteredSumbmission] = useState([]);
+
+  const { cfInfo } = useSelector((state) => state.codeforces);
+
+  useEffect(() => {
+    if (cfInfo) {
+      if (cfhandle === "")
+        setCfHandle(cfInfo.handle);
+      else loadUser();
+    }
+  }, [cfInfo, cfhandle])
+
+  function handleSubmit() {
+    dispatch(setCodeforces({ handle: cfhandle }));
+  }
 
   async function loadUser() {
     try {
@@ -27,7 +45,6 @@ export default function CodeforcesScreen() {
           maxRank: detail.maxRank,
         }
       });
-      console.log(data);
 
       setMyData(data)
       loadSubmission();
@@ -40,8 +57,8 @@ export default function CodeforcesScreen() {
 
   async function loadSubmission() {
     try {
-      const response = await axios.get(`https://codeforces.com/api/user.status?handle=${cfhandle}&from=1&count=100`);
-      console.log(response.data.result);
+      const response = await axios.get(`https://codeforces.com/api/user.status?handle=${cfhandle}&from=1&count=1000`);
+      (response.data.result);
 
       const unfilteredSumbission = response.data.result.map(prob => {
         return {
@@ -68,12 +85,10 @@ export default function CodeforcesScreen() {
         ((!filters.ok && !filters.wrong) || (prob.verdict === "OK" && filters.ok) || (prob.verdict === "WRONG_ANSWER" && filters.wrong))
         &&
         (filters.minRating <= prob.rating && prob.rating <= filters.maxRating)) {
-        console.log(prob);
         return prob;
       }
     });
 
-    console.log(filteredSumbission);
     setMyFilteredSumbmission(filteredSumbission);
   }
 
@@ -128,10 +143,10 @@ export default function CodeforcesScreen() {
         onChange={e => setCfHandle(e.target.value)}
         onKeyDown={e => {
           if (e.key === "Enter")
-            loadUser();
+            handleSubmit();
         }}
       />
-      <button onClick={loadUser}>Search</button>
+      <button onClick={handleSubmit}>Search</button>
       <br />
       {
         cfhandle !== ""
@@ -190,6 +205,3 @@ export default function CodeforcesScreen() {
     </>
   )
 }
-/*
-arrange filtered submission in grid with col name,verdict,rating,link
-*/
