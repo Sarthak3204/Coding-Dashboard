@@ -15,15 +15,19 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import RegisterScreen from './screens/RegisterScreen.jsx';
 import LoginScreen from './screens/LoginScreen.jsx';
 import ProfileScreen from './screens/ProfileScreen.jsx';
+import CFScreen from './screens/CFScreen.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index element={<HomeScreen />} />
-      <Route path='/login' element={<LoginScreen />}></Route>
-      <Route path='/register' element={<RegisterScreen />}></Route>
+      <Route path='login' element={<LoginScreen />}></Route>
+      <Route path='register' element={<RegisterScreen />}></Route>
       <Route path='' element={<PrivateRoute />}>
-        <Route path='/profile' element={<ProfileScreen />}></Route>
+        <Route path='/profile'>
+          <Route index element={<ProfileScreen />}></Route>
+          <Route path='codeforces' element={<CFScreen />}></Route>
+        </Route>
       </Route>
     </Route>
   )
