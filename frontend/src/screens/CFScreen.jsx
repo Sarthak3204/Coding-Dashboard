@@ -26,19 +26,16 @@ export default function CodeforcesScreen() {
         setCfHandle(cfInfo.handle);
       else loadUser();
     }
-    // else if (myUnfilteredSumbmission.length) filterSubmission();
   }, [cfInfo])
 
   useEffect(() => {
-    if (handle !== undefined) {
+    if (handle !== undefined)
       loadSubmission();
-    }
   }, [handle])
 
   useEffect(() => {
-    if (myUnfilteredSumbmission.length) {
+    if (myUnfilteredSumbmission.length)
       filterSubmission();
-    }
   }, [myUnfilteredSumbmission])
 
   function handleSubmit() {
@@ -48,7 +45,6 @@ export default function CodeforcesScreen() {
   async function loadUser() {
     try {
       const response = await axios.get(`https://codeforces.com/api/user.info?handles=${cfhandle}`);
-
       const data = response.data.result.map(detail => {
         return {
           handle: detail.handle,
@@ -70,12 +66,12 @@ export default function CodeforcesScreen() {
   async function loadSubmission() {
     try {
       const response = await axios.get(`https://codeforces.com/api/user.status?handle=${cfhandle}&from=1&count=1000`);
-      (response.data.result);
 
       const unfilteredSumbission = response.data.result.map(prob => {
         return {
           id: prob.id,
           name: prob.problem.name,
+          tags: prob.problem.tags,
           verdict: prob.verdict,
           rating: prob.problem.rating,
           link: `https://codeforces.com/contest/${prob.contestId}/submission/${prob.id}`,
@@ -193,15 +189,17 @@ export default function CodeforcesScreen() {
               <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Tags</th>
                 <th>Verdict</th>
                 <th>Rating</th>
                 <th>Link</th>
               </tr>
               {
-                myFilteredSumbmission.map(({ id, name, verdict, rating, link }) =>
+                myFilteredSumbmission.map(({ id, name, tags, verdict, rating, link }) =>
                   <tr key={id}>
                     <th>{id}</th>
                     <th>{name}</th>
+                    <th>{tags.join(" ")}</th>
                     <th>{verdict}</th>
                     <th>{rating}</th>
                     <th><Link to={link} target="_blank" rel="noopener noreferrer">link</Link></th>

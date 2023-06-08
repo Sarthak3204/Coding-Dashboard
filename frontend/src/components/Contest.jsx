@@ -7,7 +7,7 @@ export default function Contest() {
     const response = await axios.get("https://kontests.net/api/v1/all");
 
     const data = response.data.filter(contest => {
-      if (contest.site === "CodeForces" || contest.site === "CodeChef") {
+      if (contest.site === "CodeForces" || contest.site === "CodeChef" || contest.site === "Atcoder") {
         return contest;
       }
     }).map(contest => {

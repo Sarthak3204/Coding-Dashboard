@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeCredentials } from '../redux/slices/authSlice';
 import { useLogoutMutation } from '../redux/slices/userApiSlice';
+import { removeCodeforces } from '../redux/slices/codeforcesSlice';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ export default function HomeScreen() {
       await logout().unwrap();
 
       dispatch(removeCredentials());
+      dispatch(removeCodeforces());
       navigate('/');
       toast.success("Logout Successful");
     }

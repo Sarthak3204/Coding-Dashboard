@@ -13,10 +13,14 @@ const codeforcesSlice = createSlice({
     setCodeforces: (state, action) => {
       state.cfInfo = action.payload;
       localStorage.setItem('cfInfo', JSON.stringify(action.payload));
+    },
+    removeCodeforces: (state) => {
+      state.cfInfo = null;
+      localStorage.removeItem('cfInfo');
     }
   }
 });
 
-export const { setCodeforces } = codeforcesSlice.actions;
+export const { setCodeforces, removeCodeforces } = codeforcesSlice.actions;
 
 export default codeforcesSlice.reducer;
