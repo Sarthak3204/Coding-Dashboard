@@ -1,15 +1,21 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
+import { Flip, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import Header from './components/Header';
+import NavBar from './components/NavBar';
 
 export default function App() {
   return (
     <>
-      {/* <Header /> */}
+      <NavBar />
+      <ToastContainer
+        autoClose={500}
+        pauseOnFocusLoss={false}
+        transition={Flip}
+        hideProgressBar={true}
+        pauseOnHover={false}
+      />
       <Outlet />
-      <ToastContainer />
     </>
   )
 }

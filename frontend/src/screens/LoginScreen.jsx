@@ -1,24 +1,26 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../redux/slices/authSlice';
 import { useLoginMutation } from '../redux/slices/userApiSlice';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import FormContainer from '../components/FormContainer';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPass] = useState("");
+  const [password, setPassword] = useState("");
 
   const [login] = useLoginMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/contest');
     }
   }, [userInfo]);
 
@@ -37,28 +39,39 @@ export default function LoginScreen() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSumbit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            onChange={e => setEmail(e.target.value)}
+    <FormContainer>
+      <h1>Sign In</h1>
+
+      <Form onSubmit={handleSumbit}>
+
+        <Form.Group className='my-2' controlId='email'>
+          <Form.Label>Email Address</Form.Label>
+          <Form.Control
+            type='email'
+            placeholder='Enter email'
             value={email}
-            id='email'
-          />
-          <br />
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            onChange={e => setPass(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className='my-2' controlId='password'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Enter password'
             value={password}
-            id='password'
-          />
-          <br />
-          <button type="submit">Log In</button>
-        </div>
-      </form>
-    </>
+            onChange={(e) => setPassword(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Button type='submit' variant='primary' className='mt-3'>Sign In</Button>
+      </Form>
+
+      <Row className='py-3'>
+        <Col>
+          New Customer? <Link to='/register'>Register</Link>
+        </Col>
+      </Row>
+    </FormContainer>
   )
 }

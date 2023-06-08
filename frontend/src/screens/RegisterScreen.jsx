@@ -1,10 +1,12 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../redux/slices/authSlice';
 import { useRegisterMutation } from '../redux/slices/userApiSlice';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import FormContainer from '../components/FormContainer';
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ export default function LoginScreen() {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/contest');
     }
   }, [navigate, userInfo]);
 
@@ -45,44 +47,58 @@ export default function LoginScreen() {
   }
 
   return (
-    <>
-      <form onSubmit={handleSumbit}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            onChange={e => setName(e.target.value)}
+    <FormContainer>
+      <h1>Register</h1>
+      <Form onSubmit={handleSumbit}>
+
+        <Form.Group className='my-2' controlId='name'>
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type='name'
+            placeholder='Enter name'
             value={name}
-            id='name'
-          />
-          <br />
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className='my-2' controlId='email'>
+          <Form.Label>Email Address</Form.Label>
+          <Form.Control
+            type='email'
+            placeholder='Enter email'
             value={email}
-            id="email"
-          />
-          <br />
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className='my-2' controlId='password'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Enter password'
             value={password}
-            id="password"
-          />
-          <br />
-          <label htmlFor="confPass">Confirm Password</label>
-          <input
-            type="password"
-            onChange={e => setConfPass(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className='my-2' controlId='confirmPassword'>
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Confirm password'
             value={confPass}
-            id="confPass"
-          />
-          <br />
-          <button type="submit">Sign Up</button>
-        </div>
-      </form>
-    </>
+            onChange={(e) => setConfPass(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Button type='submit' variant='primary' className='mt-3'>Register</Button>
+      </Form>
+
+      <Row className='py-3'>
+        <Col>
+          Already have an account? <Link to='/login'>Login</Link>
+        </Col>
+      </Row>
+    </FormContainer>
   )
 }
