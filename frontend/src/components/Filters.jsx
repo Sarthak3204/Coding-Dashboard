@@ -12,42 +12,36 @@ function Filters({ filters, setFilters, filterSubmission }) {
   const handleShow = () => setShow(true);
 
   function handleOk(e) {
-    if (wrong || rte)
-      e.preventDefault();
-    else {
-      setFilters(prev => {
-        return {
-          ...prev,
-          ok: e.target.checked
-        }
-      })
-    }
+    setFilters(prev => {
+      return {
+        ...prev,
+        ok: e.target.checked,
+        wrong: false,
+        rte: false
+      }
+    })
   }
 
   function handleWrong(e) {
-    if (ok || rte)
-      e.preventDefault();
-    else {
-      setFilters(prev => {
-        return {
-          ...prev,
-          wrong: e.target.checked
-        }
-      })
-    }
+    setFilters(prev => {
+      return {
+        ...prev,
+        wrong: e.target.checked,
+        ok: false,
+        rte: false
+      }
+    })
   }
 
   function handleRte(e) {
-    if (ok || wrong)
-      e.preventDefault();
-    else {
-      setFilters(prev => {
-        return {
-          ...prev,
-          rte: e.target.checked
-        }
-      })
-    }
+    setFilters(prev => {
+      return {
+        ...prev,
+        rte: e.target.checked,
+        ok: false,
+        wrong: false
+      }
+    })
   }
 
   function handleMinRating(e) {
