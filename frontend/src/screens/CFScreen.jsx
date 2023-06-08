@@ -26,7 +26,7 @@ export default function CodeforcesScreen() {
         setCfHandle(cfInfo.handle);
       else loadUser();
     }
-  }, [cfInfo, cfhandle])
+  }, [cfInfo])
 
   function handleSubmit() {
     dispatch(setCodeforces({ handle: cfhandle }));
