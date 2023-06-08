@@ -5,6 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { setCodeforces } from '../redux/slices/codeforcesSlice';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Col, Container, Row, Table } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import { } from 'react-bootstrap/ModalHeader';
+import Filters from '../components/Filters';
 
 export default function CodeforcesScreen() {
   const dispatch = useDispatch();
@@ -74,7 +80,7 @@ export default function CodeforcesScreen() {
           tags: prob.problem.tags,
           verdict: prob.verdict,
           rating: prob.problem.rating,
-          link: `https://codeforces.com/contest/${prob.contestId}/submission/${prob.id}`,
+          url: `https://codeforces.com/contest/${prob.contestId}/submission/${prob.id}`,
         }
       });
 
@@ -141,19 +147,25 @@ export default function CodeforcesScreen() {
 
   return (
     <>
-      <div>CodeforcesScreen</div>
-      <label htmlFor="handle">Handle:</label>
-      <input
-        type="text"
-        id="handle"
-        value={cfhandle}
-        onChange={e => setCfHandle(e.target.value)}
-        onKeyDown={e => {
-          if (e.key === "Enter")
-            handleSubmit();
-        }}
-      />
-      <button onClick={handleSubmit}>Search</button>
+      <Container>
+        <Row className='justify-content-center mt-3'>
+          <Col>
+            <div className="d-flex gap-3">
+              <h3>Handle</h3>
+              <input
+                type="text"
+                value={cfhandle}
+                onChange={e => setCfHandle(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter")
+                    handleSubmit();
+                }}
+              />
+              <Button variant="primary" onClick={handleSubmit}>Search</Button>
+            </div>
+          </Col>
+        </Row>
+      </Container>
       <br />
       {
         cfhandle !== ""
@@ -161,53 +173,69 @@ export default function CodeforcesScreen() {
           <div className="">
             {handle}<br />{rating}<br />{rank}<br />{maxRating}<br />{maxRank}<br />
           </div>
-          :
-          <>
-          </>
+          : <></>
       }
       {
         myUnfilteredSumbmission.length ?
           <>
             <div>
               Filters
-              <br />
-              <label htmlFor="ok">Accepted</label>
-              <input type="checkbox" id="ok" onClick={handleOk} />
-              <br />
-              <label htmlFor="wrong">Wrong Answer</label>
-              <input type="checkbox" id="wrong" onClick={handleWrong} />
-              <br />
               <label htmlFor="minRating">Min Rating</label>
               <input type="number" id="minRating" onChange={handleMinRating} />
               <br />
               <label htmlFor="maxRating">Max Rating</label>
               <input type="number" id="maxRating" onChange={handleMaxRating} />
-              <br />
-              <button onClick={filterSubmission}>Apply</button>
             </div>
-            <table className="">
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Tags</th>
-                <th>Verdict</th>
-                <th>Rating</th>
-                <th>Link</th>
-              </tr>
-              {
-                myFilteredSumbmission.map(({ id, name, tags, verdict, rating, link }) =>
-                  <tr key={id}>
-                    <th>{id}</th>
-                    <th>{name}</th>
-                    <th>{tags.join(" ")}</th>
-                    <th>{verdict}</th>
-                    <th>{rating}</th>
-                    <th><Link to={link} target="_blank" rel="noopener noreferrer">link</Link></th>
-                  </tr>
-                )
-              }
-
-            </table>
+            <Container>
+              <Row>
+                <Col>
+                  <div className="d-flex gap-4">
+                    <Form.Check
+                      type='checkbox'
+                      label='Accepted'
+                      onClick={handleOk}
+                    />
+                    <Form.Check
+                      type='checkbox'
+                      label='Wrong Answer'
+                      onClick={handleWrong}
+                    />
+                    <Button variant="primary" onClick={filterSubmission}>Apply</Button>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+            <Filters />
+            <Container>
+              <Row className="justify-content-center mt-5">
+                <Col>
+                  <Table striped bordered hover className="text-center">
+                    <thead>
+                      <tr className="text-center">
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>TAGS</th>
+                        <th>VERDICT</th>
+                        <th>RATING</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        myFilteredSumbmission.map(({ id, name, tags, verdict, rating, url }) =>
+                          <tr key={id}>
+                            <td><Link to={url} target="_blank" rel="noopener noreferrer">{id}</Link></td>
+                            <td>{name}</td>
+                            <td>{tags.join(" ")}</td>
+                            <td>{verdict}</td>
+                            <td>{rating}</td>
+                          </tr>
+                        )
+                      }
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            </Container>
           </>
           : <></>
       }
