@@ -8,8 +8,6 @@ import { setCodeforces } from '../redux/slices/codeforcesSlice';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { } from 'react-bootstrap/ModalHeader';
 import Filters from '../components/Filters';
 
 export default function CodeforcesScreen() {
@@ -17,9 +15,9 @@ export default function CodeforcesScreen() {
 
   const [cfhandle, setCfHandle] = useState("");
   const [myData, setMyData] = useState([{}]);
-  const { handle, rating, rank, maxRating, maxRank } = myData[0];
+  const { handle } = myData[0];
 
-  const [filters, setFilters] = useState({ ok: false, wrong: false, minRating: 800, maxRating: 3500 });
+  const [filters, setFilters] = useState({ ok: false, wrong: false, rte: false, minRating: 800, maxRating: 3500 });
 
   const [myUnfilteredSumbmission, setMyUnfilteredSumbmission] = useState([]);
   const [myFilteredSumbmission, setMyFilteredSumbmission] = useState([]);
@@ -91,67 +89,30 @@ export default function CodeforcesScreen() {
     }
   }
 
-  function filterSubmission() {
+  function filterSubmission(e) {
+    const { ok, wrong, rte, minRating, maxRating } = filters;
+
     const filteredSumbission = myUnfilteredSumbmission.filter(prob => {
-      if (prob.rating !== undefined
+      const { verdict, rating } = prob;
+      if (rating !== undefined
         &&
-        ((!filters.ok && !filters.wrong) || (prob.verdict === "OK" && filters.ok) || (prob.verdict === "WRONG_ANSWER" && filters.wrong))
+        ((!ok && !wrong && !rte)
+          || (verdict === "OK" && ok)
+          || (verdict === "WRONG_ANSWER" && wrong)
+          || (verdict === "RUNTIME_ERROR" && rte))
         &&
-        (filters.minRating <= prob.rating && prob.rating <= filters.maxRating)) {
-        return prob;
-      }
+        (minRating <= rating && rating <= maxRating)) return prob;
     });
 
     setMyFilteredSumbmission(filteredSumbission);
   }
 
-  function handleOk(e) {
-    if (filters.wrong)
-      e.preventDefault();
-    else {
-      setFilters(prev => {
-        return {
-          ...prev, ok: !prev.ok
-        }
-      })
-    }
-  }
-
-  function handleWrong(e) {
-    if (filters.ok)
-      e.preventDefault();
-    else {
-      setFilters(prev => {
-        return {
-          ...prev, wrong: !prev.wrong
-        }
-      })
-    }
-  }
-
-  function handleMinRating(e) {
-    setFilters(prev => {
-      return {
-        ...prev, minRating: Math.max(800, e.target.value)
-      }
-    })
-  }
-
-  function handleMaxRating(e) {
-    setFilters(prev => {
-      return {
-        ...prev, maxRating: Math.min(3500, e.target.value)
-      }
-    })
-  }
-
   return (
     <>
       <Container>
-        <Row className='justify-content-center mt-3'>
+        <Row className='mt-3'>
           <Col>
             <div className="d-flex gap-3">
-              <h3>Handle</h3>
               <input
                 type="text"
                 value={cfhandle}
@@ -160,52 +121,18 @@ export default function CodeforcesScreen() {
                   if (e.key === "Enter")
                     handleSubmit();
                 }}
+                placeholder="Handle"
               />
               <Button variant="primary" onClick={handleSubmit}>Search</Button>
+              {myUnfilteredSumbmission.length ?
+                <Filters filters={filters} setFilters={setFilters} filterSubmission={filterSubmission} /> : <></>}
             </div>
           </Col>
         </Row>
       </Container>
-      <br />
-      {
-        cfhandle !== ""
-          ?
-          <div className="">
-            {handle}<br />{rating}<br />{rank}<br />{maxRating}<br />{maxRank}<br />
-          </div>
-          : <></>
-      }
       {
         myUnfilteredSumbmission.length ?
           <>
-            <div>
-              Filters
-              <label htmlFor="minRating">Min Rating</label>
-              <input type="number" id="minRating" onChange={handleMinRating} />
-              <br />
-              <label htmlFor="maxRating">Max Rating</label>
-              <input type="number" id="maxRating" onChange={handleMaxRating} />
-            </div>
-            <Container>
-              <Row>
-                <Col>
-                  <div className="d-flex gap-4">
-                    <Form.Check
-                      type='checkbox'
-                      label='Accepted'
-                      onClick={handleOk}
-                    />
-                    <Form.Check
-                      type='checkbox'
-                      label='Wrong Answer'
-                      onClick={handleWrong}
-                    />
-                    <Button variant="primary" onClick={filterSubmission}>Apply</Button>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-            <Filters />
             <Container>
               <Row className="justify-content-center mt-5">
                 <Col>
@@ -236,8 +163,7 @@ export default function CodeforcesScreen() {
                 </Col>
               </Row>
             </Container>
-          </>
-          : <></>
+          </> : <></>
       }
     </>
   )

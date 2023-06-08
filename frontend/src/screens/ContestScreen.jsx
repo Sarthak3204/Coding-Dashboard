@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Col, Container, Row, Table } from 'react-bootstrap';
-// import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
 
 export default function Contest() {
@@ -31,10 +30,6 @@ export default function Contest() {
     loadContest();
   }, [])
 
-  useEffect(() => {
-    console.log(myData);
-  }, [myData])
-
   return (
     <Container>
       <Row className="justify-content-center mt-5">
@@ -46,18 +41,16 @@ export default function Contest() {
                 <th>PLATFORM</th>
                 <th>START TIME</th>
                 <th>END TIME</th>
-                <th>LINK</th>
               </tr>
             </thead>
             <tbody>
               {
                 myData.map(({ name, platform, startTime, endTime, url }) =>
                   <tr>
-                    <td>{name}</td>
+                    <td><Link to={url} target="_blank" rel="noopener noreferrer">{name}</Link></td>
                     <td>{platform}</td>
                     <td>{startTime}</td>
                     <td>{endTime}</td>
-                    <td><Link to={url} target="_blank" rel="noopener noreferrer">link</Link></td>
                   </tr>
                 )
               }
