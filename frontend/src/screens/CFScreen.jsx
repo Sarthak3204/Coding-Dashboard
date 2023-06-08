@@ -26,7 +26,20 @@ export default function CodeforcesScreen() {
         setCfHandle(cfInfo.handle);
       else loadUser();
     }
+    // else if (myUnfilteredSumbmission.length) filterSubmission();
   }, [cfInfo])
+
+  useEffect(() => {
+    if (handle !== undefined) {
+      loadSubmission();
+    }
+  }, [handle])
+
+  useEffect(() => {
+    if (myUnfilteredSumbmission.length) {
+      filterSubmission();
+    }
+  }, [myUnfilteredSumbmission])
 
   function handleSubmit() {
     dispatch(setCodeforces({ handle: cfhandle }));
@@ -46,8 +59,7 @@ export default function CodeforcesScreen() {
         }
       });
 
-      setMyData(data)
-      loadSubmission();
+      setMyData(data);
     }
     catch (error) {
       toast.error("Handle not found");
@@ -71,7 +83,6 @@ export default function CodeforcesScreen() {
       });
 
       setMyUnfilteredSumbmission(unfilteredSumbission);
-      filterSubmission();
     }
     catch (error) {
       console.error(error);
