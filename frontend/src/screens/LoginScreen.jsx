@@ -104,7 +104,7 @@ export default function LoginScreen() {
               <ul>
                 <li>Atleast 8 characters</li>
                 <li>Atleast one uppercase and one lowercase</li>
-                <li>Atleast one number and special character</li>
+                <li>Atleast one digit and one special character</li>
               </ul>
             </div>
           </Form.Control.Feedback>

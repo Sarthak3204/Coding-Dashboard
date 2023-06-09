@@ -11,7 +11,7 @@ import { body } from "express-validator";
 
 const router = express.Router();
 
-router.post("/", [
+const checker = [
     body("email")
         .isEmail()
         .withMessage('Invalid email address'),
@@ -21,9 +21,11 @@ router.post("/", [
         .withMessage('Password must be at least 8 characters long')
         .matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/)
         .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character')
-], registerUser);
+]
 
-router.post("/auth", authUser);
+router.post("/", checker, registerUser);
+
+router.post("/auth", checker, authUser);
 router.post("/logout", logoutUser);
 router.route("/profile")
     .get(protect, getUserProfile)
