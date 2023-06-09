@@ -9,6 +9,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Filters from '../components/Filters';
+import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function CodeforcesScreen() {
   const dispatch = useDispatch();
@@ -22,6 +24,9 @@ export default function CodeforcesScreen() {
   const [myUnfilteredSumbmission, setMyUnfilteredSumbmission] = useState([]);
   const [myFilteredSumbmission, setMyFilteredSumbmission] = useState([]);
 
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(50);
+  const [pageList, setPageList] = useState([0])
   const { cfInfo } = useSelector((state) => state.codeforces);
 
   useEffect(() => {
@@ -89,7 +94,7 @@ export default function CodeforcesScreen() {
     }
   }
 
-  function filterSubmission(e) {
+  function filterSubmission() {
     const { ok, wrong, rte, minRating, maxRating } = filters;
 
     const filteredSumbission = myUnfilteredSumbmission.filter(prob => {
@@ -106,6 +111,27 @@ export default function CodeforcesScreen() {
 
     setMyFilteredSumbmission(filteredSumbission);
   }
+
+  useEffect(() => {
+    const total = Math.ceil(myFilteredSumbmission.length / perPage);
+    const arr = [];
+
+    for (let i = 0; i < total; i++)
+      arr.push(i);
+
+    setPageList(arr);
+  }, [myFilteredSumbmission.length, perPage])
+
+  useEffect(() => {
+    setPage(0);
+  }, [perPage])
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }, [page, perPage])
 
   return (
     <>
@@ -131,39 +157,76 @@ export default function CodeforcesScreen() {
         </Row>
       </Container>
       {
-        myUnfilteredSumbmission.length ?
-          <>
-            <Container>
-              <Row className="justify-content-center mt-5">
+        (myUnfilteredSumbmission.length > 0) &&
+        <>
+          <Container>
+            <Row className="justify-content-center mt-5">
+              <Col>
+                <Table striped bordered hover className="text-center">
+                  <thead>
+                    <tr className="text-center">
+                      <th>ID</th>
+                      <th>NAME</th>
+                      <th>TAGS</th>
+                      <th>VERDICT</th>
+                      <th>RATING</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      myFilteredSumbmission.slice(page * perPage, (page + 1) * perPage).map(({ id, name, tags, verdict, rating, url }) =>
+                        <tr key={id}>
+                          <td><Link to={url} target="_blank" rel="noopener noreferrer">{id}</Link></td>
+                          <td>{name}</td>
+                          <td>{tags.join(" ")}</td>
+                          <td>{verdict}</td>
+                          <td>{rating}</td>
+                        </tr>
+                      )
+                    }
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+            <Row className="justify-content-md-end text-center mb-3 gap-2" md="auto" >
+              <Col className="d-flex">
+                Jump to Page:
+                <Dropdown className='mx-2'>
+                  <Dropdown.Toggle variant="light" id="dropdown-basic">
+                    {page + 1}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="text-center" >
+                    {pageList.map(pageNo =>
+                      <Dropdown.Item key={pageNo} onClick={() => setPage(pageNo)}>{pageNo + 1}</Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col className="d-flex">
+                Rows per page:
+                <Dropdown className='mx-2'>
+                  <Dropdown.Toggle variant="light" id="dropdown-basic">
+                    {perPage}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="text-center" >
+                    {[50, 100, 200].map(cnt => <Dropdown.Item onClick={() => setPerPage(cnt)}>{cnt}</Dropdown.Item>)}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+              <Col>
+                {page * perPage + 1}-{Math.min((page + 1) * perPage, myFilteredSumbmission.length)} of {myFilteredSumbmission.length}
+              </Col>
+              {page > 0 &&
                 <Col>
-                  <Table striped bordered hover className="text-center">
-                    <thead>
-                      <tr className="text-center">
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>TAGS</th>
-                        <th>VERDICT</th>
-                        <th>RATING</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        myFilteredSumbmission.map(({ id, name, tags, verdict, rating, url }) =>
-                          <tr key={id}>
-                            <td><Link to={url} target="_blank" rel="noopener noreferrer">{id}</Link></td>
-                            <td>{name}</td>
-                            <td>{tags.join(" ")}</td>
-                            <td>{verdict}</td>
-                            <td>{rating}</td>
-                          </tr>
-                        )
-                      }
-                    </tbody>
-                  </Table>
-                </Col>
-              </Row>
-            </Container>
-          </> : <></>
+                  <BsArrowLeft size={24} style={{ cursor: "pointer" }} onClick={() => setPage(p => p - 1)} />
+                </Col>}
+              {(page + 1) * perPage < myFilteredSumbmission.length &&
+                <Col>
+                  <BsArrowRight size={24} style={{ cursor: "pointer" }} onClick={() => setPage(p => p + 1)} />
+                </Col>}
+            </Row>
+          </Container>
+        </>
       }
     </>
   )
