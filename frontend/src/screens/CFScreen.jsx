@@ -123,10 +123,6 @@ export default function CodeforcesScreen() {
   }, [myFilteredSumbmission.length, perPage])
 
   useEffect(() => {
-    setPage(0);
-  }, [perPage])
-
-  useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
