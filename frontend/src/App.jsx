@@ -9,7 +9,7 @@ export default function App() {
     <>
       <NavBar />
       <ToastContainer
-        autoClose={500}
+        autoClose={700}
         pauseOnFocusLoss={false}
         transition={Flip}
         hideProgressBar={true}

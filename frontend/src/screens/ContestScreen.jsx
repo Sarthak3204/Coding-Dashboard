@@ -15,6 +15,7 @@ export default function Contest() {
       }
     }).map(contest => {
       return {
+        id: crypto.randomUUID(),
         name: contest.name,
         platform: contest.site,
         startTime: contest.start_time,
@@ -45,8 +46,8 @@ export default function Contest() {
             </thead>
             <tbody>
               {
-                myData.map(({ name, platform, startTime, endTime, url }) =>
-                  <tr>
+                myData.map(({ id, name, platform, startTime, endTime, url }) =>
+                  <tr key={id}>
                     <td><Link to={url} target="_blank" rel="noopener noreferrer">{name}</Link></td>
                     <td>{platform}</td>
                     <td>{startTime}</td>
