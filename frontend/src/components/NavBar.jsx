@@ -24,6 +24,7 @@ export default function HomeScreen() {
 
   const [logout] = useLogoutMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const { cfInfo } = useSelector((state) => state.codeforces);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -48,6 +49,11 @@ export default function HomeScreen() {
     else if (pathname === "/codeforces") setBrand("CodeForces");
     else if (pathname === "/codechef") setBrand("CodeChef");
   }, [pathname])
+
+  // function redirectCF() {
+  //   navigate('/profile');
+  //   toast.error("Enter Codeforces Handle");
+  // }
 
   return (
     <header>
@@ -75,11 +81,12 @@ export default function HomeScreen() {
                       </NavDropdown.Item>
                     </LinkContainer>
 
-                    <LinkContainer to='/codeforces'>
-                      <NavDropdown.Item>
-                        <SiCodeforces /> Codeforces
-                      </NavDropdown.Item>
-                    </LinkContainer>
+                    {cfInfo &&
+                      <LinkContainer to='/codeforces'>
+                        <NavDropdown.Item>
+                          <SiCodeforces /> Codeforces
+                        </NavDropdown.Item>
+                      </LinkContainer>}
 
                     <LinkContainer to='/codechef'>
                       <NavDropdown.Item>

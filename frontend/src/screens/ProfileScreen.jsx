@@ -32,7 +32,6 @@ export default function ProfileScreen() {
   }, [])
 
   function handleSubmitCF() {
-    console.log(cfhandle);
     loadUser();
     dispatch(setCodeforces({ handle: cfhandle }));
   }
@@ -208,23 +207,23 @@ export default function ProfileScreen() {
               <Col>
                 <Table striped bordered hover className="text-center">
                   <tbody>
-                    <tr>
+                    <tr key="0">
                       <th>Handle</th>
                       <td>{myData[0].handle}</td>
                     </tr>
-                    <tr>
+                    <tr key="1">
                       <th>Rating</th>
                       <td>{myData[0].rating}</td>
                     </tr>
-                    <tr>
+                    <tr key="2">
                       <th>Rank</th>
                       <td>{myData[0].rank}</td>
                     </tr>
-                    <tr>
+                    <tr key="3">
                       <th>Max Rating</th>
                       <td>{myData[0].maxRating}</td>
                     </tr>
-                    <tr>
+                    <tr key="4">
                       <th>Max Rank</th>
                       <td>{myData[0].maxRank}</td>
                     </tr>

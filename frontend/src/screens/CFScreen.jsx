@@ -1,24 +1,17 @@
 // @ts-nocheck
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { setCodeforces } from '../redux/slices/codeforcesSlice';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Container, Row, Table } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import Filters from '../components/Filters';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function CodeforcesScreen() {
-  const dispatch = useDispatch();
-
-  const [cfhandle, setCfHandle] = useState("");
-  const [myData, setMyData] = useState([{}]);
-  const { handle } = myData[0];
-
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({ ok: false, wrong: false, rte: false, minRating: 800, maxRating: 3500 });
 
   const [myUnfilteredSumbmission, setMyUnfilteredSumbmission] = useState([]);
@@ -30,51 +23,17 @@ export default function CodeforcesScreen() {
   const { cfInfo } = useSelector((state) => state.codeforces);
 
   useEffect(() => {
-    if (cfInfo) {
-      if (cfhandle === "")
-        setCfHandle(cfInfo.handle);
-      else loadUser();
-    }
-  }, [cfInfo])
-
-  useEffect(() => {
-    if (handle !== undefined)
-      loadSubmission();
-  }, [handle])
+    loadSubmission();
+  }, [])
 
   useEffect(() => {
     if (myUnfilteredSumbmission.length)
       filterSubmission();
   }, [myUnfilteredSumbmission])
 
-  function handleSubmit() {
-    dispatch(setCodeforces({ handle: cfhandle }));
-  }
-
-  async function loadUser() {
-    try {
-      const response = await axios.get(`https://codeforces.com/api/user.info?handles=${cfhandle}`);
-      const data = response.data.result.map(detail => {
-        return {
-          handle: detail.handle,
-          rating: detail.rating,
-          rank: detail.rank,
-          maxRating: detail.maxRating,
-          maxRank: detail.maxRank,
-        }
-      });
-
-      setMyData(data);
-    }
-    catch (error) {
-      toast.error("Handle not found");
-      console.error(error);
-    }
-  }
-
   async function loadSubmission() {
     try {
-      const response = await axios.get(`https://codeforces.com/api/user.status?handle=${cfhandle}&from=1&count=1000`);
+      const response = await axios.get(`https://codeforces.com/api/user.status?handle=${cfInfo.handle}&from=1&count=1000`);
 
       const unfilteredSumbission = response.data.result.map(prob => {
         return {
@@ -124,25 +83,6 @@ export default function CodeforcesScreen() {
 
   return (
     <>
-      <Container>
-        <Row className='mt-3'>
-          <Col>
-            <div className="d-flex gap-3">
-              <input
-                type="text"
-                value={cfhandle}
-                onChange={e => setCfHandle(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === "Enter")
-                    handleSubmit();
-                }}
-                placeholder="Handle"
-              />
-              <Button variant="primary" onClick={handleSubmit}>Search</Button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
       {
         (myUnfilteredSumbmission.length > 0) &&
         <>
