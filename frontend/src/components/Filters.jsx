@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { LuFilter } from 'react-icons/lu';
 
 function Filters({ filters, setFilters, filterSubmission }) {
   const { ok, wrong, rte } = filters;
@@ -62,8 +63,8 @@ function Filters({ filters, setFilters, filterSubmission }) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>Filters</Button>
-
+      {/* <Button variant="primary" >Filters</Button> */}
+      <LuFilter size={32} style={{ cursor: "pointer" }} onClick={handleShow} />
       <Modal
         show={show}
         onHide={handleClose}

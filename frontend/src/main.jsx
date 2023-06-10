@@ -16,6 +16,7 @@ import LoginScreen from './screens/LoginScreen.jsx';
 import CFScreen from './screens/CFScreen.jsx';
 import CCScreen from './screens/CCScreen.jsx';
 import ContestScreen from './screens/ContestScreen.jsx';
+import ProfileScreen from './screens/ProfileScreen.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path='login' element={<LoginScreen />}></Route>
       <Route path='register' element={<RegisterScreen />}></Route>
       <Route path='' element={<PrivateRoute />}>
+        <Route index path='profile' element={<ProfileScreen />}></Route>
         <Route path='contest' element={<ContestScreen />}></Route>
         <Route path='codeforces' element={<CFScreen />}></Route>
         <Route path='codechef' element={<CCScreen />}></Route>

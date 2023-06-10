@@ -22,7 +22,7 @@ export default function LoginScreen() {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/contest');
+      navigate('/profile');
     }
   }, [navigate, userInfo]);
 
@@ -61,7 +61,7 @@ export default function LoginScreen() {
       const res = await register({ name, email, password }).unwrap();
 
       dispatch(setCredentials(res));
-      navigate('/');
+      navigate('/profile');
       toast.success("Registration Successful");
     }
     catch (err) {

@@ -10,7 +10,7 @@ import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { SiCodeforces, SiCodechef } from 'react-icons/si';
 import { RiMacbookLine } from 'react-icons/ri';
-import { CgLogOut } from 'react-icons/cg';
+import { CgProfile, CgLogOut } from 'react-icons/cg';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function HomeScreen() {
@@ -43,9 +43,10 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    if (pathname === "/codeforces") setBrand("CodeForces");
-    else if (pathname === "/codechef") setBrand("CodeChef");
+    if (pathname === "/profile") setBrand("Profile")
     else if (pathname === "/contest") setBrand("Upcoming Contest")
+    else if (pathname === "/codeforces") setBrand("CodeForces");
+    else if (pathname === "/codechef") setBrand("CodeChef");
   }, [pathname])
 
   return (
@@ -61,6 +62,12 @@ export default function HomeScreen() {
               {userInfo ? (
                 <>
                   <NavDropdown title={userInfo.name} id='username'>
+
+                    <LinkContainer to='/profile'>
+                      <NavDropdown.Item>
+                        <CgProfile /> Profile
+                      </NavDropdown.Item>
+                    </LinkContainer>
 
                     <LinkContainer to='/contest'>
                       <NavDropdown.Item>

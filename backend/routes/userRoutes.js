@@ -28,7 +28,7 @@ router.post("/", checker, registerUser);
 router.post("/auth", checker, authUser);
 router.post("/logout", logoutUser);
 router.route("/profile")
-    .get(protect, getUserProfile)
-    .put(protect, updateUserProfile);
+    .get(getUserProfile)
+    .put(updateUserProfile);
 
 export default router;

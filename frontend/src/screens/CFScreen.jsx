@@ -122,13 +122,6 @@ export default function CodeforcesScreen() {
     setPageList(arr);
   }, [myFilteredSumbmission.length, perPage])
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }, [page, perPage])
-
   return (
     <>
       <Container>
@@ -146,8 +139,6 @@ export default function CodeforcesScreen() {
                 placeholder="Handle"
               />
               <Button variant="primary" onClick={handleSubmit}>Search</Button>
-              {myUnfilteredSumbmission.length ?
-                <Filters filters={filters} setFilters={setFilters} filterSubmission={filterSubmission} /> : <></>}
             </div>
           </Col>
         </Row>
@@ -156,7 +147,50 @@ export default function CodeforcesScreen() {
         (myUnfilteredSumbmission.length > 0) &&
         <>
           <Container>
-            <Row className="justify-content-center mt-5">
+            <Row className="justify-content-between text-center gap-2 mt-3" md="auto" >
+              <Col><Filters filters={filters} setFilters={setFilters} filterSubmission={filterSubmission} /></Col>
+              <Col>
+                <Row xs="auto">
+                  <Col className="d-flex">
+                    <span className="pt-1">Jump to page:</span>
+                    <Dropdown className='mx-2'>
+                      <Dropdown.Toggle variant="light" id="dropdown-basic">
+                        {page + 1}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="text-center">
+                        {pageList.map(pageNo =>
+                          <Dropdown.Item key={pageNo} onClick={() => setPage(pageNo)}>{pageNo + 1}</Dropdown.Item>
+                        )}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  <Col className="d-flex">
+                    <span className="pt-1">Rows per page:</span>
+                    <Dropdown className='mx-2'>
+                      <Dropdown.Toggle variant="light" id="dropdown-basic">
+                        {perPage}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="text-center" >
+                        {[50, 100, 200].map(cnt => <Dropdown.Item onClick={() => setPerPage(cnt)}>{cnt}</Dropdown.Item>)}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  <Col className="pt-1">
+                    {page * perPage + 1}-{Math.min((page + 1) * perPage, myFilteredSumbmission.length)} of {myFilteredSumbmission.length}
+                  </Col>
+                  {page > 0 &&
+                    <Col className="pt-1">
+                      <BsArrowLeft size={24} style={{ cursor: "pointer" }} onClick={() => setPage(p => p - 1)} />
+                    </Col>}
+                  {(page + 1) * perPage < myFilteredSumbmission.length &&
+                    <Col className="pt-1">
+                      <BsArrowRight size={24} style={{ cursor: "pointer" }} onClick={() => setPage(p => p + 1)} />
+                    </Col>}
+                </Row>
+              </Col>
+            </Row>
+
+            <Row className="justify-content-center mt-3">
               <Col>
                 <Table striped bordered hover className="text-center">
                   <thead>
@@ -184,44 +218,7 @@ export default function CodeforcesScreen() {
                 </Table>
               </Col>
             </Row>
-            <Row className="justify-content-md-end text-center mb-3 gap-2" md="auto" >
-              <Col className="d-flex">
-                Jump to Page:
-                <Dropdown className='mx-2'>
-                  <Dropdown.Toggle variant="light" id="dropdown-basic">
-                    {page + 1}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="text-center" >
-                    {pageList.map(pageNo =>
-                      <Dropdown.Item key={pageNo} onClick={() => setPage(pageNo)}>{pageNo + 1}</Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-              <Col className="d-flex">
-                Rows per page:
-                <Dropdown className='mx-2'>
-                  <Dropdown.Toggle variant="light" id="dropdown-basic">
-                    {perPage}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="text-center" >
-                    {[50, 100, 200].map(cnt => <Dropdown.Item onClick={() => setPerPage(cnt)}>{cnt}</Dropdown.Item>)}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-              <Col>
-                {page * perPage + 1}-{Math.min((page + 1) * perPage, myFilteredSumbmission.length)} of {myFilteredSumbmission.length}
-              </Col>
-              {page > 0 &&
-                <Col>
-                  <BsArrowLeft size={24} style={{ cursor: "pointer" }} onClick={() => setPage(p => p - 1)} />
-                </Col>}
-              {(page + 1) * perPage < myFilteredSumbmission.length &&
-                <Col>
-                  <BsArrowRight size={24} style={{ cursor: "pointer" }} onClick={() => setPage(p => p + 1)} />
-                </Col>}
-            </Row>
-          </Container>
+          </Container >
         </>
       }
     </>
