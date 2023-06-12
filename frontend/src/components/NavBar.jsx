@@ -50,18 +50,11 @@ export default function HomeScreen() {
     else if (pathname === "/codechef") setBrand("CodeChef");
   }, [pathname])
 
-  // function redirectCF() {
-  //   navigate('/profile');
-  //   toast.error("Enter Codeforces Handle");
-  // }
-
   return (
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
-          <LinkContainer to='/'>
-            <Navbar.Brand>{brand}</Navbar.Brand>
-          </LinkContainer>
+          <Navbar.Brand>{brand}</Navbar.Brand>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
@@ -90,7 +83,7 @@ export default function HomeScreen() {
 
                     <LinkContainer to='/codechef'>
                       <NavDropdown.Item>
-                        <SiCodechef /> codechef
+                        <SiCodechef /> Codechef
                       </NavDropdown.Item>
                     </LinkContainer>
 
