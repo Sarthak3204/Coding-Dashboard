@@ -63,7 +63,6 @@ function Filters({ filters, setFilters, filterSubmission }) {
 
   return (
     <>
-      {/* <Button variant="primary" >Filters</Button> */}
       <LuFilter size={32} style={{ cursor: "pointer" }} onClick={handleShow} />
       <Modal
         show={show}
