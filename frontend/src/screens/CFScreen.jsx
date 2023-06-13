@@ -1,9 +1,8 @@
 // @ts-nocheck
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import Filters from '../components/Filters';
@@ -11,7 +10,6 @@ import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 export default function CodeforcesScreen() {
-  const navigate = useNavigate();
   const [filters, setFilters] = useState({ ok: false, wrong: false, rte: false, minRating: 800, maxRating: 3500 });
 
   const [myUnfilteredSumbmission, setMyUnfilteredSumbmission] = useState([]);
