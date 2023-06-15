@@ -53,12 +53,12 @@ const authUser = asyncHandler(async (req, res) => {
 
     if (user && (await user.matchPassword(password))) {
         generateToken(res, user._id);
-
         res.json({
             _id: user._id,
             name: user.name,
             email: user.email,
         });
+        console.log(res);
     }
     else {
         res.status(401);//401 Unauthorized
@@ -103,7 +103,7 @@ route:  PUT api/users/profile
 access: PRIVATE
 */
 const updateUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.body._id);
+    const user = await User.findById(req.user._id);
 
     if (user) {
         if (req.body.name !== "") user.name = req.body.name;

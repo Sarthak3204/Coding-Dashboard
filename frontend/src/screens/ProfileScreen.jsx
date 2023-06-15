@@ -1,6 +1,6 @@
 // @ts-nocheck
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateUserMutation } from '../redux/slices/userApiSlice'
@@ -68,13 +68,13 @@ export default function ProfileScreen() {
     };
 
     return Object.values(conditions).every((condition) => condition);
-  };
+  }
 
   function validateEmail() {
     // Email validation regex pattern
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  };
+  }
 
   const handleSumbit = async (e) => {
     e.preventDefault();
