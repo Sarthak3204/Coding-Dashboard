@@ -19,8 +19,8 @@ export default function Contest() {
         id: crypto.randomUUID(),
         name: contest.name,
         platform: contest.site,
-        startTime: format(new Date(contest.start_time), 'dd/MM/yyyy HH:mm'),
-        endTime: format(new Date(contest.end_time), 'dd/MM/yyyy HH:mm'),
+        startTime: format(new Date(contest.start_time), 'dd/MM/yyyy hh:mm a'),
+        endTime: format(new Date(contest.end_time), 'dd/MM/yyyy hh:mm a'),
         url: contest.url
       }
     });
