@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { format } from "date-fns";
 
 export default function Contest() {
   const [myData, setMyData] = useState([]);
@@ -18,8 +19,8 @@ export default function Contest() {
         id: crypto.randomUUID(),
         name: contest.name,
         platform: contest.site,
-        startTime: contest.start_time,
-        endTime: contest.end_time,
+        startTime: format(new Date(contest.start_time), 'dd/MM/yyyy HH:mm'),
+        endTime: format(new Date(contest.end_time), 'dd/MM/yyyy HH:mm'),
         url: contest.url
       }
     });
