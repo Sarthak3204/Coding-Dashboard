@@ -25,7 +25,7 @@ const checker = [
 
 router.post("/", checker, registerUser);
 
-router.post("/auth", checker, authUser);
+router.post("/auth", authUser);
 router.post("/logout", logoutUser);
 router.route("/profile")
     .get(protect, getUserProfile)
