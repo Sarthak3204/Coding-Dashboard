@@ -1,17 +1,19 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify';
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
-import { removeCredentials } from '../redux/slices/authSlice';
-import { useLogoutMutation } from '../redux/slices/userApiSlice';
-import { removeCodeforces } from '../redux/slices/codeforcesSlice';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import { SiCodeforces, SiCodechef } from 'react-icons/si';
-import { RiMacbookLine } from 'react-icons/ri';
-import { CgProfile, CgLogOut } from 'react-icons/cg';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { removeCredentials } from "../redux/slices/authSlice";
+import { useLogoutMutation } from "../redux/slices/userApiSlice";
+import { removeCodeforces } from "../redux/slices/codeforcesSlice";
+import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { SiCodeforces } from "react-icons/si";
+import { GiHorseHead } from "react-icons/gi";
+import { RiMacbookLine } from "react-icons/ri";
+import { CgProfile, CgLogOut } from "react-icons/cg";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { removeAtcoder } from "../redux/slices/atcoderSlice";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ export default function HomeScreen() {
   const [logout] = useLogoutMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const { cfInfo } = useSelector((state) => state.codeforces);
+  const { acInfo } = useSelector((state) => state.atcoder);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -33,59 +36,61 @@ export default function HomeScreen() {
 
       dispatch(removeCredentials());
       dispatch(removeCodeforces());
+      dispatch(removeAtcoder());
 
       setBrand("Coding Dashboard");
-      navigate('/');
+      navigate("/");
       toast.success("Logout Successful");
-    }
-    catch (err) {
+    } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   };
 
   useEffect(() => {
-    if (pathname === "/profile") setBrand("Profile")
-    else if (pathname === "/contest") setBrand("Upcoming Contest")
+    if (pathname === "/profile") setBrand("Profile");
+    else if (pathname === "/contest") setBrand("Upcoming Contest");
     else if (pathname === "/codeforces") setBrand("CodeForces");
-    else if (pathname === "/codechef") setBrand("CodeChef");
-  }, [pathname])
+    else if (pathname === "/atcoder") setBrand("AtCoder");
+  }, [pathname]);
 
   return (
     <header>
-      <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <Navbar.Brand>{brand}</Navbar.Brand>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='ms-auto'>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
               {userInfo ? (
                 <>
-                  <NavDropdown title={userInfo.name} id='username'>
-
-                    <LinkContainer to='/profile'>
+                  <NavDropdown title={userInfo.name} id="username">
+                    <LinkContainer to="/profile">
                       <NavDropdown.Item>
                         <CgProfile /> Profile
                       </NavDropdown.Item>
                     </LinkContainer>
 
-                    <LinkContainer to='/contest'>
+                    <LinkContainer to="/contest">
                       <NavDropdown.Item>
                         <RiMacbookLine /> Contest
                       </NavDropdown.Item>
                     </LinkContainer>
 
-                    {cfInfo &&
-                      <LinkContainer to='/codeforces'>
+                    {cfInfo && (
+                      <LinkContainer to="/codeforces">
                         <NavDropdown.Item>
-                          <SiCodeforces /> Codeforces
+                          <SiCodeforces /> CodeForces
                         </NavDropdown.Item>
-                      </LinkContainer>}
+                      </LinkContainer>
+                    )}
 
-                    <LinkContainer to='/codechef'>
-                      <NavDropdown.Item>
-                        <SiCodechef /> Codechef
-                      </NavDropdown.Item>
-                    </LinkContainer>
+                    {acInfo && (
+                      <LinkContainer to="/atcoder">
+                        <NavDropdown.Item>
+                          <GiHorseHead /> AtCoder
+                        </NavDropdown.Item>
+                      </LinkContainer>
+                    )}
 
                     <NavDropdown.Item onClick={handleLogout}>
                       <CgLogOut /> Logout
@@ -94,10 +99,10 @@ export default function HomeScreen() {
                 </>
               ) : (
                 <>
-                  <LinkContainer to='/login'>
+                  <LinkContainer to="/login">
                     <Nav.Link>Sign In</Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to='/register'>
+                  <LinkContainer to="/register">
                     <Nav.Link>Sign Up</Nav.Link>
                   </LinkContainer>
                 </>
@@ -107,5 +112,5 @@ export default function HomeScreen() {
         </Container>
       </Navbar>
     </header>
-  )
+  );
 }

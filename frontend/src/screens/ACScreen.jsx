@@ -5,17 +5,15 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Col, Container, Row, Table } from "react-bootstrap";
-import Filters from "../components/cfFilters";
+import Filters from "../components/acFilters";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import Dropdown from "react-bootstrap/Dropdown";
 
-export default function CodeforcesScreen() {
+export default function ACScreen() {
   const [filters, setFilters] = useState({
     ok: false,
     wrong: false,
     rte: false,
-    minRating: 800,
-    maxRating: 3500,
   });
 
   const [myUnfilteredSumbmission, setMyUnfilteredSumbmission] = useState([]);
@@ -24,7 +22,7 @@ export default function CodeforcesScreen() {
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(50);
   const [pageList, setPageList] = useState([0]);
-  const { cfInfo } = useSelector((state) => state.codeforces);
+  const { acInfo } = useSelector((state) => state.atcoder);
 
   useEffect(() => {
     loadSubmission();
@@ -37,23 +35,23 @@ export default function CodeforcesScreen() {
   async function loadSubmission() {
     try {
       const response = await axios.get(
-        `https://codeforces.com/api/user.status?handle=${cfInfo.handle}&from=1&count=1000`
+        `https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=${acInfo.handle}&from_second=1`
       );
 
-      const unfilteredSumbission = response.data.result.map((prob) => {
+      console.log(response.data);
+      const array = response.data.map((prob) => {
         return {
           id: prob.id,
-          name: prob.problem.name,
-          tags: prob.problem.tags,
-          verdict: prob.verdict,
-          rating: prob.problem.rating,
-          time: prob.timeConsumedMillis,
-          memory: (Number(prob.memoryConsumedBytes) / 1000000).toFixed(2),
-          url: `https://codeforces.com/contest/${prob.contestId}/submission/${prob.id}`,
-          p_url: `https://codeforces.com/contest/${prob.contestId}/problem/${prob.problem.index}`,
+          pid: prob.problem_id,
+          result: prob.result,
+          time: prob.execution_time,
+          url: `https://atcoder.jp/contests/${prob.contest_id}/submissions/${prob.id}`,
+          p_url: `https://atcoder.jp/contests/${prob.contest_id}/tasks/${prob.problem_id}`,
+          lang: prob.language,
         };
       });
 
+      const unfilteredSumbission = array.reverse();
       setMyUnfilteredSumbmission(unfilteredSumbission);
     } catch (error) {
       console.error(error);
@@ -61,18 +59,15 @@ export default function CodeforcesScreen() {
   }
 
   function filterSubmission() {
-    const { ok, wrong, rte, minRating, maxRating } = filters;
+    const { ok, wrong, rte } = filters;
 
     const filteredSumbission = myUnfilteredSumbmission.filter((prob) => {
-      const { verdict, rating } = prob;
+      const { result } = prob;
       if (
-        rating !== undefined &&
-        ((!ok && !wrong && !rte) ||
-          (verdict === "OK" && ok) ||
-          (verdict === "WRONG_ANSWER" && wrong) ||
-          (verdict === "RUNTIME_ERROR" && rte)) &&
-        minRating <= rating &&
-        rating <= maxRating
+        (!ok && !wrong && !rte) ||
+        (result === "AC" && ok) ||
+        (result === "WA" && wrong) ||
+        (result === "RE" && rte)
       )
         return prob;
     });
@@ -176,72 +171,56 @@ export default function CodeforcesScreen() {
                   <thead>
                     <tr className="text-center">
                       <th>ID</th>
-                      <th style={{ width: "25%" }}>NAME</th>
-                      <th style={{ width: "25%" }}>TAGS</th>
-                      <th>VERDICT</th>
-                      <th>RATING</th>
+                      <th>PROBLEM ID</th>
+                      <th>RESULT</th>
                       <th>TIME</th>
-                      <th>MEMORY</th>
+                      <th>LANGUAGE</th>
                     </tr>
                   </thead>
                   <tbody>
                     {myFilteredSumbmission
                       .slice(page * perPage, (page + 1) * perPage)
-                      .map(
-                        ({
-                          id,
-                          name,
-                          tags,
-                          verdict,
-                          rating,
-                          url,
-                          p_url,
-                          time,
-                          memory,
-                        }) => (
-                          <tr key={id}>
-                            <td>
-                              <Link
-                                to={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {id}
-                              </Link>
-                            </td>
-                            <td>
-                              <Link
-                                to={p_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                  color: "darkblue",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                {name}
-                              </Link>
-                            </td>
-                            <td>{tags.join(" ")}</td>
+                      .map(({ id, pid, result, time, url, p_url, lang }) => (
+                        <tr key={id}>
+                          <td>
+                            <Link
+                              to={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {id}
+                            </Link>
+                          </td>
+                          <td>
+                            <Link
+                              to={p_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: "darkblue",
+                                textDecoration: "none",
+                              }}
+                            >
+                              {pid}
+                            </Link>
+                          </td>
 
-                            {(() => {
-                              if (verdict === "OK") {
-                                return <td>Accepted</td>;
-                              } else if (verdict === "WRONG_ANSWER") {
-                                return <td>Wrong Answer</td>;
-                              } else if (verdict === "TIME_LIMIT_EXCEEDED") {
-                                return <td>Time Limit Exceeded</td>;
-                              } else {
-                                return <td>Runtime Error</td>;
-                              }
-                            })()}
+                          {(() => {
+                            if (result === "AC") {
+                              return <td>Accepted</td>;
+                            } else if (result === "WA") {
+                              return <td>Wrong Answer</td>;
+                            } else if (result === "TLE") {
+                              return <td>Time Limit Exceeded</td>;
+                            } else {
+                              return <td>Runtime Error</td>;
+                            }
+                          })()}
 
-                            <td>{rating}</td>
-                            <td>{time} ms</td>
-                            <td>{memory} MB</td>
-                          </tr>
-                        )
-                      )}
+                          <td>{time} ms</td>
+                          <td>{lang}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
               </Col>

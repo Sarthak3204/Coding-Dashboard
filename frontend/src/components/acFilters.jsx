@@ -1,9 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
-import { Col, Container, Form, Row } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { LuFilter } from 'react-icons/lu';
+import React from "react";
+import { useState } from "react";
+import { Col, Container, Form, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { LuFilter } from "react-icons/lu";
 
 function Filters({ filters, setFilters, filterSubmission }) {
   const { ok, wrong, rte } = filters;
@@ -13,52 +13,36 @@ function Filters({ filters, setFilters, filterSubmission }) {
   const handleShow = () => setShow(true);
 
   function handleOk(e) {
-    setFilters(prev => {
+    setFilters((prev) => {
       return {
         ...prev,
         ok: e.target.checked,
         wrong: false,
-        rte: false
-      }
-    })
+        rte: false,
+      };
+    });
   }
 
   function handleWrong(e) {
-    setFilters(prev => {
+    setFilters((prev) => {
       return {
         ...prev,
         wrong: e.target.checked,
         ok: false,
-        rte: false
-      }
-    })
+        rte: false,
+      };
+    });
   }
 
   function handleRte(e) {
-    setFilters(prev => {
+    setFilters((prev) => {
       return {
         ...prev,
         rte: e.target.checked,
         ok: false,
-        wrong: false
-      }
-    })
-  }
-
-  function handleMinRating(e) {
-    setFilters(prev => {
-      return {
-        ...prev, minRating: Math.max(800, e.target.value)
-      }
-    })
-  }
-
-  function handleMaxRating(e) {
-    setFilters(prev => {
-      return {
-        ...prev, maxRating: Math.min(3500, e.target.value)
-      }
-    })
+        wrong: false,
+      };
+    });
   }
 
   return (
@@ -70,7 +54,6 @@ function Filters({ filters, setFilters, filterSubmission }) {
         backdrop="static"
         keyboard={false}
       >
-
         <Modal.Header closeButton>
           <Modal.Title>Filters</Modal.Title>
         </Modal.Header>
@@ -79,37 +62,43 @@ function Filters({ filters, setFilters, filterSubmission }) {
           <Container>
             <Row>
               <Col>
-                <div className='d-flex justify-content-around'>
+                <div className="d-flex justify-content-around">
                   <Form.Check
-                    type={'checkbox'}
+                    type={"checkbox"}
                     checked={ok}
                     onChange={handleOk}
                     label="Accepted"
                   />
                   <Form.Check
-                    type={'checkbox'}
+                    type={"checkbox"}
                     checked={wrong}
                     onChange={handleWrong}
                     label="Wrong Answer"
                   />
                   <Form.Check
-                    type={'checkbox'}
+                    type={"checkbox"}
                     checked={rte}
                     onChange={handleRte}
                     label="Run Time Error"
                   />
-                </div>
-                <div className="d-flex justify-content-center gap-3">
-                  <input type="number" onChange={handleMinRating} placeholder="Min Rating" />
-                  <input type="number" onChange={handleMaxRating} placeholder="Max Rating" />
                 </div>
               </Col>
             </Row>
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>Close</Button>
-          <Button variant="primary" onClick={() => { handleClose(); filterSubmission(); }}>Apply</Button>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleClose();
+              filterSubmission();
+            }}
+          >
+            Apply
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
