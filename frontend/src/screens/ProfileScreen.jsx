@@ -63,8 +63,7 @@ export default function ProfileScreen() {
   async function loadCfUser() {
     try {
       const response = await axios.get(
-        `https://codeforces.com/api/user.info?handles=${
-          cfInfo ? cfInfo.handle : cfhandle
+        `https://codeforces.com/api/user.info?handles=${cfInfo ? cfInfo.handle : cfhandle
         }`
       );
 
@@ -88,8 +87,7 @@ export default function ProfileScreen() {
   async function loadAcUser() {
     try {
       const response = await axios.get(
-        `https://kenkoooo.com/atcoder/atcoder-api/v3/user_info?user=${
-          acInfo ? acInfo.handle : achandle
+        `https://kenkoooo.com/atcoder/atcoder-api/v3/user_info?user=${acInfo ? acInfo.handle : achandle
         }`
       );
 
@@ -168,10 +166,14 @@ export default function ProfileScreen() {
   return (
     <Container>
       <Row
-        className="justify-content-between mt-5"
-        style={{ marginBottom: "30px" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: '20px',
+          marginBottom: "30px",
+        }}
       >
-        <Col xs={12} md={5} className="card p-3" style={{ width: "45%" }}>
+        <Col xs={12} md={6} className="card p-3">
           <Row className="d-flex">
             <Col>
               <h2>CodeForces</h2>
@@ -223,8 +225,15 @@ export default function ProfileScreen() {
             </Col>
           </Row>
         </Col>
-
-        <Col xs={12} md={5} className="card p-3" style={{ width: "45%" }}>
+      </Row>
+      <Row
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <Col xs={12} md={6} className="card p-3">
           <Row className="d-flex">
             <Col>
               <h2>AtCoder</h2>
@@ -276,6 +285,7 @@ export default function ProfileScreen() {
             </Col>
           </Row>
         </Col>
+
       </Row>
 
       <Row
@@ -285,7 +295,7 @@ export default function ProfileScreen() {
           marginBottom: "30px",
         }}
       >
-        <Col xs={12} md={5} className="card p-3">
+        <Col xs={12} md={6} className="card p-3">
           <h2>Update User</h2>
           <Form onSubmit={handleSumbit}>
             <Form.Group className="my-2" controlId="name">
