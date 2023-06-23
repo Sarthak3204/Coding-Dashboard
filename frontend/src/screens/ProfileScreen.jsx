@@ -33,14 +33,14 @@ export default function ProfileScreen() {
       loadCfUser();
       setCfHandle(cfInfo.handle);
     }
-  }, []);
+  }, [cfInfo]);
 
   useEffect(() => {
     if (acInfo) {
       loadAcUser();
       setAcHandle(acInfo.handle);
     }
-  }, []);
+  }, [acInfo]);
 
   function handleSubmitCF() {
     loadCfUser();
@@ -55,9 +55,7 @@ export default function ProfileScreen() {
   async function loadCfUser() {
     try {
       const response = await axios.get(
-        `https://codeforces.com/api/user.info?handles=${
-          cfInfo ? cfInfo.handle : cfhandle
-        }`
+        `https://codeforces.com/api/user.info?handles=${cfInfo ? cfInfo.handle : cfhandle}`
       );
 
       const data = response.data.result.map((detail) => {
@@ -80,9 +78,7 @@ export default function ProfileScreen() {
   async function loadAcUser() {
     try {
       const response = await axios.get(
-        `https://kenkoooo.com/atcoder/atcoder-api/v3/user_info?user=${
-          acInfo ? acInfo.handle : achandle
-        }`
+        `https://kenkoooo.com/atcoder/atcoder-api/v3/user_info?user=${acInfo ? acInfo.handle : achandle}`
       );
 
       const detail = response.data;
