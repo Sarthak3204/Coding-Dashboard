@@ -3,9 +3,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useRemoveUserMutation, useUpdateUserMutation } from "../redux/slices/userApiSlice";
+import {
+  useRemoveUserMutation,
+  useUpdateUserMutation,
+} from "../redux/slices/userApiSlice";
 import { setCredentials, removeCredentials } from "../redux/slices/authSlice";
-import { setCodeforces, removeCodeforces } from "../redux/slices/codeforcesSlice";
+import {
+  setCodeforces,
+  removeCodeforces,
+} from "../redux/slices/codeforcesSlice";
 import { setAtcoder, removeAtcoder } from "../redux/slices/atcoderSlice";
 import { Form, Button } from "react-bootstrap";
 import { Col, Container, Row, Table } from "react-bootstrap";
@@ -57,7 +63,9 @@ export default function ProfileScreen() {
   async function loadCfUser() {
     try {
       const response = await axios.get(
-        `https://codeforces.com/api/user.info?handles=${cfInfo ? cfInfo.handle : cfhandle}`
+        `https://codeforces.com/api/user.info?handles=${
+          cfInfo ? cfInfo.handle : cfhandle
+        }`
       );
 
       const data = response.data.result.map((detail) => {
@@ -80,7 +88,9 @@ export default function ProfileScreen() {
   async function loadAcUser() {
     try {
       const response = await axios.get(
-        `https://kenkoooo.com/atcoder/atcoder-api/v3/user_info?user=${acInfo ? acInfo.handle : achandle}`
+        `https://kenkoooo.com/atcoder/atcoder-api/v3/user_info?user=${
+          acInfo ? acInfo.handle : achandle
+        }`
       );
 
       const detail = response.data;
@@ -148,10 +158,9 @@ export default function ProfileScreen() {
       toast.success("User deleted successfully");
       dispatch(removeCredentials());
       dispatch(removeCodeforces());
-      dispatch(removeAtcoder())
-      navigate('/');
-    }
-    catch (err) {
+      dispatch(removeAtcoder());
+      navigate("/");
+    } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   }
@@ -346,9 +355,18 @@ export default function ProfileScreen() {
               </Form.Control.Feedback>
               <Form.Control.Feedback type="valid"></Form.Control.Feedback>
             </Form.Group>
-
-            <Button type="submit" variant="primary" className="mt-2">Update</Button>
-            <Button variant="danger" className="mx-2 mt-2" onClick={handleDelete}>Delete</Button>
+            <div className="d-flex justify-content-between">
+              <Button type="submit" variant="primary" className="mt-2">
+                Update
+              </Button>
+              <Button
+                variant="danger"
+                className="mx-2 mt-2"
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            </div>
           </Form>
         </Col>
       </Row>
