@@ -117,11 +117,28 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         throw new Error("User not found");
     }
 });
+/*
+descr:  delete user profile
+route:  DELETE api/users/profile
+access: PRIVATE
+*/
+const deleteUserProfile = asyncHandler(async (req, res) => {
+    const result = await User.deleteOne(req.user._id);
+
+    if (result.deletedCount === 1) {
+        res.status(200).json({ message: "User deleted successfully" });
+    }
+    else {
+        res.status(404);
+        throw new Error("User not found");
+    }
+});
 
 export {
     registerUser,
     authUser,
     logoutUser,
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    deleteUserProfile,
 };

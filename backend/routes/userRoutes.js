@@ -4,7 +4,8 @@ import {
     authUser,
     logoutUser,
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    deleteUserProfile,
 } from "../controllers/userController.js";
 import { protect } from '../middleware/authMiddleware.js';
 import { body } from "express-validator";
@@ -29,6 +30,7 @@ router.post("/auth", authUser);
 router.post("/logout", logoutUser);
 router.route("/profile")
     .get(protect, getUserProfile)
-    .put(protect, updateUserProfile);
+    .put(protect, updateUserProfile)
+    .delete(protect, deleteUserProfile);
 
 export default router;

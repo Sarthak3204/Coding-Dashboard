@@ -3,12 +3,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useUpdateUserMutation } from "../redux/slices/userApiSlice";
-import { setCredentials } from "../redux/slices/authSlice";
+import { useRemoveUserMutation, useUpdateUserMutation } from "../redux/slices/userApiSlice";
+import { setCredentials, removeCredentials } from "../redux/slices/authSlice";
+import { setCodeforces, removeCodeforces } from "../redux/slices/codeforcesSlice";
+import { setAtcoder, removeAtcoder } from "../redux/slices/atcoderSlice";
 import { Form, Button } from "react-bootstrap";
 import { Col, Container, Row, Table } from "react-bootstrap";
-import { setCodeforces } from "../redux/slices/codeforcesSlice";
-import { setAtcoder } from "../redux/slices/atcoderSlice";
 
 export default function ProfileScreen() {
   const dispatch = useDispatch();
@@ -24,6 +24,8 @@ export default function ProfileScreen() {
   const [acData, setAcData] = useState([]);
 
   const [updateUser] = useUpdateUserMutation();
+  const [removeUser] = useRemoveUserMutation();
+
   const { userInfo } = useSelector((state) => state.auth);
   const { cfInfo } = useSelector((state) => state.codeforces);
   const { acInfo } = useSelector((state) => state.atcoder);
@@ -138,6 +140,21 @@ export default function ProfileScreen() {
       toast.error(err?.data?.message || err.error);
     }
   };
+
+  async function handleDelete(e) {
+    e.preventDefault();
+    try {
+      const res = await removeUser().unwrap();
+      toast.success("User deleted successfully");
+      dispatch(removeCredentials());
+      dispatch(removeCodeforces());
+      dispatch(removeAtcoder())
+      navigate('/');
+    }
+    catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  }
 
   return (
     <Container>
@@ -330,9 +347,8 @@ export default function ProfileScreen() {
               <Form.Control.Feedback type="valid"></Form.Control.Feedback>
             </Form.Group>
 
-            <Button type="submit" variant="primary" className="mt-3">
-              Update
-            </Button>
+            <Button type="submit" variant="primary" className="mt-2">Update</Button>
+            <Button variant="danger" className="mx-2 mt-2" onClick={handleDelete}>Delete</Button>
           </Form>
         </Col>
       </Row>

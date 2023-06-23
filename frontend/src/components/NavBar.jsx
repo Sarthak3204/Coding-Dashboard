@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeCredentials } from "../redux/slices/authSlice";
-import { useLogoutMutation } from "../redux/slices/userApiSlice";
 import { removeCodeforces } from "../redux/slices/codeforcesSlice";
+import { removeAtcoder } from "../redux/slices/atcoderSlice";
+import { useLogoutMutation } from "../redux/slices/userApiSlice";
 import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { SiCodeforces } from "react-icons/si";
@@ -13,7 +14,6 @@ import { GiHorseHead } from "react-icons/gi";
 import { RiMacbookLine } from "react-icons/ri";
 import { CgProfile, CgLogOut } from "react-icons/cg";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { removeAtcoder } from "../redux/slices/atcoderSlice";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
