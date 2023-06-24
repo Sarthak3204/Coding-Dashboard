@@ -1,6 +1,6 @@
 # Coding Dashboard
 
-This is a MERN stack application with authentication. This is for a SPA (Single Page Application) workflow that uses the [Vite](https://vite.dev) Build tool
+This is a MERN stack application with authentication and Redux Toolkit for state management. This is for a SPA (Single Page Application) workflow that uses the [Vite](https://vite.dev) Build tool
 
 <details>
   <summary>Screenshots</summary>
