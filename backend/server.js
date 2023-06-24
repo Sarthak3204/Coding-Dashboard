@@ -16,7 +16,8 @@ const app = express();
 
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:3000' //frontend port
+  // origin: 'http://localhost:3000' //frontend port
+  origin: 'https://coding-dashboard-silk.vercel.app'
 }));
 
 app.use(express.json());
