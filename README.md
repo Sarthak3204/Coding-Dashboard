@@ -33,7 +33,7 @@ It includes the following:
 
 ### Env Variables
 
-Create `.env` file in root directory and add the following
+Rename the `.env.example` file to `.env` and add the following
 
 ```
 NODE_ENV = development
