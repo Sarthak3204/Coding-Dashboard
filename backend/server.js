@@ -15,9 +15,9 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 app.use(cors({
-  credentials: true,
   // origin: 'http://localhost:3000' //frontend port
-  origin: 'https://coding-dashboard-silk.vercel.app'
+  origin: 'https://coding-dashboard-silk.vercel.app',
+  credentials: true
 }));
 
 app.use(express.json());
