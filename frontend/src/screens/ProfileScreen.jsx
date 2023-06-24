@@ -15,8 +15,10 @@ import {
 import { setAtcoder, removeAtcoder } from "../redux/slices/atcoderSlice";
 import { Form, Button } from "react-bootstrap";
 import { Col, Container, Row, Table } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileScreen() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
@@ -369,11 +371,7 @@ export default function ProfileScreen() {
               <Button type="submit" variant="primary" className="mt-2">
                 Update
               </Button>
-              <Button
-                variant="danger"
-                className="mx-2 mt-2"
-                onClick={handleDelete}
-              >
+              <Button variant="danger" className="mx-2 mt-2" onClick={handleDelete}>
                 Delete
               </Button>
             </div>
